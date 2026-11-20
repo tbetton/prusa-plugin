@@ -1,0 +1,48 @@
+name: PrusaSlicer Plugin Marketplace
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+  release:
+    types: [published]
+
+permissions:
+  contents: read
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - name: Validate all bundles
+        run: python3 scripts/validate-bundles.py
+
+  publish:
+    if: github.event_name == 'release'
+    needs: validate
+    runs-on: ubuntu-latest
+    environment: release
+    permissions:
+      contents: read
+      id-token: write
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          persist-credentials: false
+      - name: Select the bundle for this release
+        id: bundle
+        shell: bash
+        run: |
+          git merge-base --is-ancestor "$GITHUB_SHA" origin/main
+          bundle=$(python3 scripts/validate-bundles.py --tag "$GITHUB_REF_NAME")
+          printf 'path=%s\n' "$bundle" >> "$GITHUB_OUTPUT"
+      - name: Sign and submit to Prusa
+        uses: prusa3d/plugin-marketplace-publish@v1
+        with:
+          path: ${{ steps.bundle.outputs.path }}
+          private-key: ${{ secrets.PRUSA_SLICER_PLUGIN_MARKETPLACE_SIGNING_KEY }}

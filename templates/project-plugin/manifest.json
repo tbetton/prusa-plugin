@@ -1,0 +1,12 @@
+{
+  "id": "io.github.tbetton.starter-block",
+  "name": "Starter Block",
+  "version": "0.1.0",
+  "author": "example-author",
+  "license": "MIT",
+  "description": "Adds a configurable rectangular block to the current plate.",
+  "min_slicer_version": "3.0.0-alpha13",
+  "required_apis": {
+    "project.plugin": "1.0.0"
+  }
+}
