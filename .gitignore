@@ -1,0 +1,8 @@
+.DS_Store
+__pycache__/
+dist/
+*.zip
+*.key
+*.pem
+manifest.sig
+manifest.txt
