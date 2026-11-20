@@ -46,6 +46,8 @@ Use [the local upload bridge](scripts/send-to-print-queue.py) with the **Print Q
 3. In PrusaSlicer 3, add a physical printer named **Print Queue** and associate it with the matching printer preset. Choose **OctoPrint** as the host type. Enter `https://SERVER_LAN_IP:17891` for a server deployment, or `http://127.0.0.1:17891` for a bridge on the same computer. If you use a private CA, select its public certificate in **HTTPS CA File**. Paste the Connect Local credential into the API key field and use **Test** to check access to the queue.
 4. Select the **Print Queue** physical printer, slice the project, click the network-send button and choose **Upload**. PrusaSlicer reports success after Print Queue returns a job ID. Confirm readiness as usual when the printer is available and the plate is clear.
 
+PrusaSlicer 3.0.0-alpha14 can read a custom CA from its physical printer profile even though the editor hides that field. With PrusaSlicer closed, open the `physical_printer` directory under its configuration folder, find the JSON file whose `physical_printer_user_given_name` is `Print Queue`, and set `physical_printer_ca_file` to the absolute path of the public CA certificate. Reopen PrusaSlicer to load the profile.
+
 If upload succeeds but the queue request fails, PrusaSlicer shows the server-side file path. Check **Print Queue** first, then use **Storage → Add to the print queue** on that file if the job is missing.
 
 ## Gitea to GitHub
